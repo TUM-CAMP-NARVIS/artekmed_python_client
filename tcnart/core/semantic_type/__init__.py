@@ -1,24 +1,13 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import List, Tuple, Dict, Optional, Union
+from numpy import uint64
 
 from . import model
 from .generic import GenericContentConfig
 from .image import ImageContentConfig
 from .geometry import GeometryContentConfig
 from .transform import TransformContentConfig
-
-__all__ = [
-    "model",
-    "GenericContentConfig",
-    "ImageContentConfig",
-    "GeometryContentConfig",
-    "TransformContentConfig",
-]
-
-
-# python
-
 
 from .model import (
     BaseIdentifierStorageType,
@@ -31,8 +20,30 @@ from .model import (
     constants,
 )
 
+__all__ = [
+    "model",
+    "GenericContentConfig",
+    "ImageContentConfig",
+    "GeometryContentConfig",
+    "TransformContentConfig",
+    "SemanticType",
+    "BaseIdentifierStorageType",
+    "IdentifierStorageType",
+    "ScalarType",
+    "CardinalityType",
+    "ContainerType",
+    "MemoryRepresentationType",
+    "ContentTypes",
+    "constants",
+]
 
-def combine_flags(flags: List[int]) -> int:
+
+# python
+
+
+
+
+def combine_flags(flags: List[uint64]) -> uint64:
     acc = 0
     for flag in flags:
         acc |= flag
@@ -53,16 +64,16 @@ ContentTypeConfigStorage = Union[
 ]
 
 
-def get_content_type(value: int) -> Optional[ContentTypes]:
+def get_content_type(value: uint64) -> Optional[ContentTypes]:
     ct_u8 = (value & constants.CONTENT_TYPE_MASK) >> constants.CONTENT_TYPE_OFFSET
     return ContentTypes.from_u8(ct_u8) or ContentTypes.None_
 
 
-def set_content_type(content_type: ContentTypes) -> int:
+def set_content_type(content_type: ContentTypes) -> uint64:
     return (content_type.as_u8() & 0xFF) << constants.CONTENT_TYPE_OFFSET
 
 
-def _content_storage_to_u64(cfg: ContentTypeConfigStorage) -> int:
+def _content_storage_to_u64(cfg: ContentTypeConfigStorage) -> uint64:
     if isinstance(cfg, GenericContentConfig):
         return cfg.to_u64()
     if isinstance(cfg, ImageContentConfig):

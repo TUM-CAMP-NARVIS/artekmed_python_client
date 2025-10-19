@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from numpy import uint64
 
 from .model import (
     constants,
@@ -19,7 +20,7 @@ class ImageContentConfig:
     custom_mask_type: EmptyMaskType | None = None
 
     @classmethod
-    def new(cls, value: int) -> "ImageContentConfig":
+    def new(cls, value: uint64) -> "ImageContentConfig":
         cfg = cls()
         cfg.compression_type = ImageCompressionTypes.from_u8(
             ((value & constants.COMPRESSION_TYPE_MASK) >> constants.COMPRESSION_TYPE_OFFSET)
@@ -40,24 +41,24 @@ class ImageContentConfig:
 
     @classmethod
     def default(cls) -> "ImageContentConfig":
-        return cls.new(0)
+        return cls.new(uint64(0))
 
     @classmethod
-    def from_u64(cls, value: int) -> "ImageContentConfig":
+    def from_u64(cls, value: uint64) -> "ImageContentConfig":
         return cls.new(value)
 
-    def to_u64(self) -> int:
-        value = 0
+    def to_u64(self) -> uint64:
+        value = uint64(0)
         if self.compression_type is not None:
-            value |= int(self.compression_type.as_u8()) << constants.COMPRESSION_TYPE_OFFSET
+            value |= uint64(self.compression_type.as_u8()) << constants.COMPRESSION_TYPE_OFFSET
         if self.format_type is not None:
-            value |= int(self.format_type.as_u8()) << constants.FORMAT_TYPE_OFFSET
+            value |= uint64(self.format_type.as_u8()) << constants.FORMAT_TYPE_OFFSET
         if self.custom1_type is not None:
-            value |= int(self.custom1_type.as_u8()) << constants.CUSTOM1_TYPE_OFFSET
+            value |= uint64(self.custom1_type.as_u8()) << constants.CUSTOM1_TYPE_OFFSET
         if self.custom2_type is not None:
-            value |= int(self.custom2_type.as_u8()) << constants.CUSTOM2_TYPE_OFFSET
+            value |= uint64(self.custom2_type.as_u8()) << constants.CUSTOM2_TYPE_OFFSET
         if self.custom_mask_type is not None:
-            value |= int(self.custom_mask_type.as_u8()) << constants.CUSTOM_MASK_TYPE_OFFSET
+            value |= uint64(self.custom_mask_type.as_u8()) << constants.CUSTOM_MASK_TYPE_OFFSET
         return value
 
     # Getters

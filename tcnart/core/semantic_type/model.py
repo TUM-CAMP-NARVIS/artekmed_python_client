@@ -1,37 +1,38 @@
 from __future__ import annotations
 from enum import Enum
+from numpy import uint64, uint32, uint16, uint8
 
 # Type aliases for clarity (not strictly necessary in Python)
-BaseIdentifierStorageType = int
-IdentifierStorageType = int
+BaseIdentifierStorageType = uint32
+IdentifierStorageType = uint64
 
 
 class constants:
-    SCALAR_TYPE_OFFSET: int = 0
-    CARDINALITY_TYPE_OFFSET: int = 6
-    CONTAINER_TYPE_OFFSET: int = 8
-    MEMORY_REPRESENTATION_TYPE_OFFSET: int = 14
+    SCALAR_TYPE_OFFSET: uint64 = 0
+    CARDINALITY_TYPE_OFFSET: uint64 = 6
+    CONTAINER_TYPE_OFFSET: uint64 = 8
+    MEMORY_REPRESENTATION_TYPE_OFFSET: uint64 = 14
 
-    SCALAR_TYPE_MASK: int = 0x3F << SCALAR_TYPE_OFFSET
-    CARDINALITY_TYPE_MASK: int = 0x03 << CARDINALITY_TYPE_OFFSET
-    CONTAINER_TYPE_MASK: int = 0x3F << CONTAINER_TYPE_OFFSET
-    MEMORY_REPRESENTATION_TYPE_MASK: int = 0x03 << MEMORY_REPRESENTATION_TYPE_OFFSET
+    SCALAR_TYPE_MASK: uint64 = 0x3F << SCALAR_TYPE_OFFSET
+    CARDINALITY_TYPE_MASK: uint64 = 0x03 << CARDINALITY_TYPE_OFFSET
+    CONTAINER_TYPE_MASK: uint64 = 0x3F << CONTAINER_TYPE_OFFSET
+    MEMORY_REPRESENTATION_TYPE_MASK: uint64 = 0x03 << MEMORY_REPRESENTATION_TYPE_OFFSET
 
-    CONTENT_TYPE_OFFSET: int = 16
-    COMPRESSION_TYPE_OFFSET: int = 24
-    FORMAT_TYPE_OFFSET: int = 32
-    CUSTOM1_TYPE_OFFSET: int = 40
-    CUSTOM2_TYPE_OFFSET: int = 48
-    CUSTOM_MASK_TYPE_OFFSET: int = 56
+    CONTENT_TYPE_OFFSET: uint64 = 16
+    COMPRESSION_TYPE_OFFSET: uint64 = 24
+    FORMAT_TYPE_OFFSET: uint64 = 32
+    CUSTOM1_TYPE_OFFSET: uint64 = 40
+    CUSTOM2_TYPE_OFFSET: uint64 = 48
+    CUSTOM_MASK_TYPE_OFFSET: uint64 = 56
 
-    BASE_TYPE_MASK: int = 0xFFFF
-    SEMANTIC_TYPE_MASK: int = (~BASE_TYPE_MASK) & 0xFFFFFFFFFFFFFFFF
-    CONTENT_TYPE_MASK: int = 0xFF << CONTENT_TYPE_OFFSET
-    COMPRESSION_TYPE_MASK: int = 0xFF << COMPRESSION_TYPE_OFFSET
-    FORMAT_TYPE_MASK: int = 0xFF << FORMAT_TYPE_OFFSET
-    CUSTOM1_TYPE_MASK: int = 0xFF << CUSTOM1_TYPE_OFFSET
-    CUSTOM2_TYPE_MASK: int = 0xFF << CUSTOM2_TYPE_OFFSET
-    CUSTOM_MASK_TYPE_MASK: int = 0xFF << CUSTOM_MASK_TYPE_OFFSET
+    BASE_TYPE_MASK: uint64 = 0xFFFF
+    SEMANTIC_TYPE_MASK: uint64 = (~BASE_TYPE_MASK) & 0xFFFFFFFFFFFFFFFF
+    CONTENT_TYPE_MASK: uint64 = 0xFF << CONTENT_TYPE_OFFSET
+    COMPRESSION_TYPE_MASK: uint64 = 0xFF << COMPRESSION_TYPE_OFFSET
+    FORMAT_TYPE_MASK: uint64 = 0xFF << FORMAT_TYPE_OFFSET
+    CUSTOM1_TYPE_MASK: uint64 = 0xFF << CUSTOM1_TYPE_OFFSET
+    CUSTOM2_TYPE_MASK: uint64 = 0xFF << CUSTOM2_TYPE_OFFSET
+    CUSTOM_MASK_TYPE_MASK: uint64 = 0xFF << CUSTOM_MASK_TYPE_OFFSET
 
 
 # Utilities similar to SemanticTypeEnum behavior in Rust
@@ -86,14 +87,14 @@ class ScalarType(Enum):
         return mapping[self]
 
     @staticmethod
-    def from_u8(value: int) -> ScalarType | None:
+    def from_u8(value: uint8) -> ScalarType | None:
         try:
             return ScalarType(value)
         except ValueError:
             return None
 
-    def as_u8(self) -> int:
-        return int(self.value)
+    def as_u8(self) -> uint8:
+        return uint8(self.value)
 
 
 class CardinalityType(Enum):
@@ -111,14 +112,14 @@ class CardinalityType(Enum):
         }[self]
 
     @staticmethod
-    def from_u8(value: int) -> CardinalityType | None:
+    def from_u8(value: uint8) -> CardinalityType | None:
         try:
             return CardinalityType(value)
         except ValueError:
             return None
 
-    def as_u8(self) -> int:
-        return int(self.value)
+    def as_u8(self) -> uint8:
+        return uint8(self.value)
 
 
 class ContainerType(Enum):
@@ -142,14 +143,14 @@ class ContainerType(Enum):
         }[self]
 
     @staticmethod
-    def from_u8(value: int) -> ContainerType | None:
+    def from_u8(value: uint8) -> ContainerType | None:
         try:
             return ContainerType(value)
         except ValueError:
             return None
 
-    def as_u8(self) -> int:
-        return int(self.value)
+    def as_u8(self) -> uint8:
+        return uint8(self.value)
 
     def dimensions(self) -> int | None:
         return {
@@ -175,11 +176,11 @@ class MemoryRepresentationType(Enum):
             MemoryRepresentationType.Match: "MATCH",
         }[self]
 
-    def as_u8(self) -> int:
-        return int(self.value)
+    def as_u8(self) -> uint8:
+        return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> MemoryRepresentationType | None:
+    def from_u8(value: uint8) -> MemoryRepresentationType | None:
         try:
             return MemoryRepresentationType(value)
         except ValueError:
@@ -205,11 +206,11 @@ class ContentTypes(Enum):
             ContentTypes.Match: "Match",
         }[self]
 
-    def as_u8(self) -> int:
-        return int(self.value)
+    def as_u8(self) -> uint8:
+        return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> ContentTypes | None:
+    def from_u8(value: uint8) -> ContentTypes | None:
         try:
             return ContentTypes(value)
         except ValueError:
@@ -223,10 +224,10 @@ class GenericFormatTypes(Enum):
     Custom = 0x02
     Match = 0xFF
 
-    def as_u8(self) -> int: return int(self.value)
+    def as_u8(self) -> uint8: return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> GenericFormatTypes | None:
+    def from_u8(value: uint8) -> GenericFormatTypes | None:
         try:
             return GenericFormatTypes(value)
         except ValueError:
@@ -249,10 +250,10 @@ class GenericCompressionTypes(Enum):
     Bzip = 0x04
     Match = 0xFF
 
-    def as_u8(self) -> int: return int(self.value)
+    def as_u8(self) -> uint8: return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> GenericCompressionTypes | None:
+    def from_u8(value: uint8) -> GenericCompressionTypes | None:
         try:
             return GenericCompressionTypes(value)
         except ValueError:
@@ -287,10 +288,10 @@ class ImageFormatTypes(Enum):
     Yuv444 = 0x0D
     Match = 0xFF
 
-    def as_u8(self) -> int: return int(self.value)
+    def as_u8(self) -> uint8: return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> ImageFormatTypes | None:
+    def from_u8(value: uint8) -> ImageFormatTypes | None:
         try:
             return ImageFormatTypes(value)
         except ValueError:
@@ -345,10 +346,10 @@ class ImageCompressionTypes(Enum):
     Zdepth = 0x07
     Match = 0xFF
 
-    def as_u8(self) -> int: return int(self.value)
+    def as_u8(self) -> uint8: return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> ImageCompressionTypes | None:
+    def from_u8(value: uint8) -> ImageCompressionTypes | None:
         try:
             return ImageCompressionTypes(value)
         except ValueError:
@@ -381,10 +382,10 @@ class GeometryFormatTypes(Enum):
     SparseVoxelGrid = 0x08
     Match = 0xFF
 
-    def as_u8(self) -> int: return int(self.value)
+    def as_u8(self) -> uint8: return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> GeometryFormatTypes | None:
+    def from_u8(value: uint8) -> GeometryFormatTypes | None:
         try:
             return GeometryFormatTypes(value)
         except ValueError:
@@ -411,10 +412,10 @@ class GeometryCompressionTypes(Enum):
     Draco = 0x02
     Match = 0xFF
 
-    def as_u8(self) -> int: return int(self.value)
+    def as_u8(self) -> uint8: return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> GeometryCompressionTypes | None:
+    def from_u8(value: uint8) -> GeometryCompressionTypes | None:
         try:
             return GeometryCompressionTypes(value)
         except ValueError:
@@ -441,10 +442,10 @@ class GeometryAttributes(Enum):
     Id = 0x80
     Match = 0xFF
 
-    def as_u8(self) -> int: return int(self.value)
+    def as_u8(self) -> uint8: return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> GeometryAttributes | None:
+    def from_u8(value: uint8) -> GeometryAttributes | None:
         try:
             return GeometryAttributes(value)
         except ValueError:
@@ -478,10 +479,10 @@ class TransformFormatTypes(Enum):
     Acceleration = 0x08
     Match = 0xFF
 
-    def as_u8(self) -> int: return int(self.value)
+    def as_u8(self) -> uint8: return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> TransformFormatTypes | None:
+    def from_u8(value: uint8) -> TransformFormatTypes | None:
         try:
             return TransformFormatTypes(value)
         except ValueError:
@@ -506,10 +507,10 @@ class TransformCompressionTypes(Enum):
     None_ = 0x00
     Match = 0xFF
 
-    def as_u8(self) -> int: return int(self.value)
+    def as_u8(self) -> uint8: return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> TransformCompressionTypes | None:
+    def from_u8(value: uint8) -> TransformCompressionTypes | None:
         try:
             return TransformCompressionTypes(value)
         except ValueError:
@@ -527,10 +528,10 @@ class TransformDetailTypes(Enum):
     KinectBodyTracking = 0x01
     Match = 0xFF
 
-    def as_u8(self) -> int: return int(self.value)
+    def as_u8(self) -> uint8: return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> TransformDetailTypes | None:
+    def from_u8(value: uint8) -> TransformDetailTypes | None:
         try:
             return TransformDetailTypes(value)
         except ValueError:
@@ -548,10 +549,10 @@ class EmptyCustomType(Enum):
     None_ = 0x00
     Match = 0xFF
 
-    def as_u8(self) -> int: return int(self.value)
+    def as_u8(self) -> uint8: return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> EmptyCustomType | None:
+    def from_u8(value: uint8) -> EmptyCustomType | None:
         try:
             return EmptyCustomType(value)
         except ValueError:
@@ -568,10 +569,10 @@ class EmptyMaskType(Enum):
     None_ = 0x00
     Match = 0xFF
 
-    def as_u8(self) -> int: return int(self.value)
+    def as_u8(self) -> uint8: return uint8(self.value)
 
     @staticmethod
-    def from_u8(value: int) -> EmptyMaskType | None:
+    def from_u8(value: uint8) -> EmptyMaskType | None:
         try:
             return EmptyMaskType(value)
         except ValueError:

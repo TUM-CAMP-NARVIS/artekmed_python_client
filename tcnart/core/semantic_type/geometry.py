@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from numpy import uint64
 
 from .model import (
     constants,
@@ -15,10 +16,10 @@ class GeometryContentConfig:
     format_type: GeometryFormatTypes | None = None
     custom1_type: EmptyCustomType | None = None
     custom2_type: EmptyCustomType | None = None
-    custom_mask_type: int | None = None  # u8 in Rust
+    custom_mask_type: uint64 | None = None  # u8 in Rust
 
     @classmethod
-    def new(cls, value: int) -> "GeometryContentConfig":
+    def new(cls, value: uint64) -> "GeometryContentConfig":
         cfg = cls()
         cfg.compression_type = GeometryCompressionTypes.from_u8(
             ((value & constants.COMPRESSION_TYPE_MASK) >> constants.COMPRESSION_TYPE_OFFSET)
@@ -32,31 +33,31 @@ class GeometryContentConfig:
         cfg.custom2_type = EmptyCustomType.from_u8(
             ((value & constants.CUSTOM2_TYPE_MASK) >> constants.CUSTOM2_TYPE_OFFSET)
         )
-        cfg.custom_mask_type = int(
+        cfg.custom_mask_type = uint64(
             ((value & constants.CUSTOM_MASK_TYPE_MASK) >> constants.CUSTOM_MASK_TYPE_OFFSET)
         )
         return cfg
 
     @classmethod
     def default(cls) -> "GeometryContentConfig":
-        return cls.new(0)
+        return cls.new(uint64(0))
 
     @classmethod
-    def from_u64(cls, value: int) -> "GeometryContentConfig":
+    def from_u64(cls, value: uint64) -> "GeometryContentConfig":
         return cls.new(value)
 
-    def to_u64(self) -> int:
-        value = 0
+    def to_u64(self) -> uint64:
+        value = uint64(0)
         if self.compression_type is not None:
-            value |= int(self.compression_type.as_u8()) << constants.COMPRESSION_TYPE_OFFSET
+            value |= uint64(self.compression_type.as_u8()) << constants.COMPRESSION_TYPE_OFFSET
         if self.format_type is not None:
-            value |= int(self.format_type.as_u8()) << constants.FORMAT_TYPE_OFFSET
+            value |= uint64(self.format_type.as_u8()) << constants.FORMAT_TYPE_OFFSET
         if self.custom1_type is not None:
-            value |= int(self.custom1_type.as_u8()) << constants.CUSTOM1_TYPE_OFFSET
+            value |= uint64(self.custom1_type.as_u8()) << constants.CUSTOM1_TYPE_OFFSET
         if self.custom2_type is not None:
-            value |= int(self.custom2_type.as_u8()) << constants.CUSTOM2_TYPE_OFFSET
+            value |= uint64(self.custom2_type.as_u8()) << constants.CUSTOM2_TYPE_OFFSET
         if self.custom_mask_type is not None:
-            value |= int(self.custom_mask_type) << constants.CUSTOM_MASK_TYPE_OFFSET
+            value |= uint64(self.custom_mask_type) << constants.CUSTOM_MASK_TYPE_OFFSET
         return value
 
     # Getters
@@ -72,7 +73,7 @@ class GeometryContentConfig:
     def get_custom2_type(self) -> EmptyCustomType | None:
         return self.custom2_type
 
-    def get_custom_mask_type(self) -> int | None:
+    def get_custom_mask_type(self) -> uint64 | None:
         return self.custom_mask_type
 
     # Setters
@@ -88,5 +89,5 @@ class GeometryContentConfig:
     def set_custom2_type(self, custom2_type: EmptyCustomType) -> None:
         self.custom2_type = custom2_type
 
-    def set_custom_mask_type(self, mask_type: int) -> None:
+    def set_custom_mask_type(self, mask_type: uint64) -> None:
         self.custom_mask_type = mask_type
