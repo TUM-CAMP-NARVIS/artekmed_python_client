@@ -14,7 +14,7 @@ dependencies = [
   "pycdr2>=1.0.0",
   "dataclasses-json>=0.6.7",
   "typing_extensions>=4.10.0",
-  "numpy>=2.2.6",
+  "numpy",
 ]
 
 [project.urls]
