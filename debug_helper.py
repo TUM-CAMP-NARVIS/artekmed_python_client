@@ -24,7 +24,7 @@ class DbgHelper:
         self.stream_name = name
     def __call__(self, frame):
         st = SemanticType(frame.semantic_type)
-        print(f"received element {self.stream_name}: {st}")
+        # print(f"received element {self.stream_name}: {st}")
 
 for stream_name in stream_config:
     worker_senders.append(DbgHelper(stream_name))
