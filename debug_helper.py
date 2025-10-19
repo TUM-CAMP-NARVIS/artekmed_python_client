@@ -19,15 +19,15 @@ stream_config = resolve_stream_descriptors(topic_prefix, None, channel_calibrati
 
 worker_senders = []
 
-class dbg_helper:
-    def __init__(self, stream_name):
-        self.stream_name = stream_name
+class DbgHelper:
+    def __init__(self, name):
+        self.stream_name = name
     def __call__(self, frame):
         st = SemanticType(frame.semantic_type)
         print(f"received element {self.stream_name}: {st}")
 
 for stream_name in stream_config:
-    worker_senders.append(dbg_helper(stream_name))
+    worker_senders.append(DbgHelper(stream_name))
 
 threads = start_all_receivers(8, None, worker_senders, session, stream_config)
 
