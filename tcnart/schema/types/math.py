@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pycdr2 import IdlStruct
 from pycdr2.types import int32, uint32, float64, float32, sequence, uint8, uint16, uint64, array
 
