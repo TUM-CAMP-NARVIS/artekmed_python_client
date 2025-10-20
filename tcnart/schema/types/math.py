@@ -34,28 +34,28 @@ class Quaternion(IdlStruct, typename="Quaternion"):
 
 @dataclass
 class Matrix4x4(IdlStruct, typename="Matrix4x4"):
-    col0: array[float64, 4] = (1.0, 0.0, 0.0, 0.0)
-    col1: array[float64, 4] = (0.0, 1.0, 0.0, 0.0)
-    col2: array[float64, 4] = (0.0, 0.0, 1.0, 0.0)
-    col3: array[float64, 4] = (0.0, 0.0, 0.0, 1.0)
+    col0: array[float64, 4] = field(default_factory=lambda: (1.0, 0.0, 0.0, 0.0))
+    col1: array[float64, 4] = field(default_factory=lambda: (0.0, 1.0, 0.0, 0.0))
+    col2: array[float64, 4] = field(default_factory=lambda: (0.0, 0.0, 1.0, 0.0))
+    col3: array[float64, 4] = field(default_factory=lambda: (0.0, 0.0, 0.0, 1.0))
 
 
 @dataclass
 class Matrix4x3(IdlStruct, typename="Matrix4x3"):
-    col0: array[float64, 3] = (1.0, 0.0, 0.0)
-    col1: array[float64, 3] = (0.0, 1.0, 0.0)
-    col2: array[float64, 3] = (0.0, 0.0, 1.0)
-    col3: array[float64, 3] = (0.0, 0.0, 0.0)
+    col0: array[float64, 3] = field(default_factory=lambda: (1.0, 0.0, 0.0))
+    col1: array[float64, 3] = field(default_factory=lambda: (0.0, 1.0, 0.0))
+    col2: array[float64, 3] = field(default_factory=lambda: (0.0, 0.0, 1.0))
+    col3: array[float64, 3] = field(default_factory=lambda: (0.0, 0.0, 0.0))
 
 
 @dataclass
 class Matrix3x3(IdlStruct, typename="Matrix3x3"):
-    col0: array[float64, 3] = (1.0, 0.0, 0.0)
-    col1: array[float64, 3] = (0.0, 1.0, 0.0)
-    col2: array[float64, 3] = (0.0, 0.0, 1.0)
+    col0: array[float64, 3] = field(default_factory=lambda: (1.0, 0.0, 0.0))
+    col1: array[float64, 3] = field(default_factory=lambda: (0.0, 1.0, 0.0))
+    col2: array[float64, 3] = field(default_factory=lambda: (0.0, 0.0, 1.0))
 
 
 @dataclass
 class Ray(IdlStruct, typename="Ray"):
-    origin: Vector3 = Vector3()
-    direction: Vector3 = Vector3(0.0, 0.0, 1.0)
+    origin: Vector3 = field(default_factory=lambda: Vector3(0., 0., 0.))
+    direction: Vector3 = field(default_factory=lambda: Vector3(0.0, 0.0, 1.0))
